@@ -18,7 +18,7 @@ body {
 	text-shadow: rgba(0,0,0,0.6) 1px 1px 0;
 }
 
-/* ── Search bar ────────────────────────────────── */
+/* Search bar */
 
 #searches {
 	position: sticky;
@@ -73,19 +73,17 @@ body {
 	outline-offset: -2px;
 }
 
-/* ── Link grid ─────────────────────────────────── */
+/* Link grid */
 
 #links {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 1.5em;
 	padding: 1.5em 1.2em 2em;
-	/* Each column is at least 180px; browser fills as many as fit */
 	align-content: flex-start;
 }
 
 .block {
-	/* Minimum 180px, grows to fill available space up to ~230px */
 	flex: 0 0 clamp(170px, 20vw, 220px);
 }
 
@@ -118,7 +116,7 @@ a:hover {
 	text-decoration: underline;
 }
 
-/* ── Mobile: single-column layout ─────────────── */
+/* Mobile: single-column layout */
 
 @media (max-width: 480px) {
 	#searches {
