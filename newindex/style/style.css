@@ -1,0 +1,146 @@
+/* Personal Start Page — Responsive Styles */
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	background-color: #000;
+	background-image: url('bluemarblecorner1.jpg');
+	background-repeat: no-repeat;
+	background-position: 125px 400px;
+	background-size: cover;
+	color: #ddd;
+	font: 76% Verdana, Tahoma, sans-serif;
+	text-shadow: rgba(0,0,0,0.6) 1px 1px 0;
+}
+
+/* Search bar */
+
+#searches {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	align-items: center;
+	padding: 0.6em 1.2em;
+	background: rgba(0, 0, 0, 0.65);
+	backdrop-filter: blur(4px);
+}
+
+#searches form {
+	display: flex;
+	margin: 0;
+}
+
+#searches input[type="text"] {
+	background: #222;
+	border: 1px solid #444;
+	border-right: none;
+	border-radius: 5px 0 0 5px;
+	color: #ddd;
+	font-size: 1em;
+	padding: 0.35em 0.6em;
+	min-width: 0;
+	width: clamp(120px, 20vw, 220px);
+	box-shadow: rgba(0,0,0,0.3) 0 1px 3px inset;
+}
+
+#searches input[type="submit"] {
+	background: #333;
+	border: 1px solid #444;
+	border-left: none;
+	border-radius: 0 5px 5px 0;
+	color: #ddd;
+	font-size: 1em;
+	padding: 0.35em 0.7em;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+#searches input[type="submit"]:hover {
+	background: #444;
+	color: #fff;
+}
+
+#searches input:focus {
+	outline: 2px solid #f7c777;
+	outline-offset: -2px;
+}
+
+/* Link grid */
+
+#links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.5em;
+	padding: 1.5em 1.2em 2em;
+	align-content: flex-start;
+}
+
+.block {
+	flex: 0 0 clamp(170px, 20vw, 220px);
+}
+
+h1 {
+	margin: 0 0 0.3em;
+	font-size: 1.5em;
+	color: #fff;
+	border-bottom: 1px solid rgba(255,255,255,0.15);
+	padding-bottom: 0.15em;
+}
+
+ul {
+	margin: 0;
+	padding: 0.2em 0;
+	list-style: none;
+}
+
+ul li {
+	padding: 4px 0;
+}
+
+a {
+	color: #f7c777;
+	font-size: 1.15em;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+/* Mobile: single-column layout */
+
+@media (max-width: 480px) {
+	#searches {
+		padding: 0.5em 0.8em;
+	}
+
+	#searches input[type="text"] {
+		width: 100%;
+		min-width: 0;
+		flex: 1;
+	}
+
+	#searches form {
+		width: 100%;
+	}
+
+	#links {
+		padding: 1em 0.8em;
+		gap: 1.2em;
+		flex-direction: column;
+	}
+
+	.block {
+		flex: none;
+		width: 100%;
+	}
+}
