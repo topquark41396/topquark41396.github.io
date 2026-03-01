@@ -9,7 +9,7 @@
 var newWindow = false;
 
 // Search engines to show in the top bar
-var google       = true;
+var google       = flase;
 var googleImages = false;
 var yahoo        = false;
 var wikipedia    = false;
