@@ -1,131 +1,148 @@
-/**
-	Startpage Reworked
-	==================
+/* Personal Start Page — Responsive Styles */
 
-	by Christian Brassat,
-*/
-
-/**
-	Released under MIT License
-	
-	Copyright (c) 2010 Christian Brassat
-	<http://crshd.cc>
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+*, *::before, *::after {
+	box-sizing: border-box;
+}
 
 body {
-	/* background: #151515;		*/								/* Page background */
-	/* background: #080808; */
-	background: #000000;
-	background-image:url('bluemarblecorner1.jpg');
-	background-repeat:no-repeat;
-	/* background-position: 0px 350px;*/
-	background-position:125px 400px;
-	background-size:cover;
-		color: #ddd;														/* Font color */
-	padding: 60px 25px;													/* Padding between link blocks and edge */
-	font:76% Verdana,Tahoma,sans-serif;
-	/* font-family: "Museo", "Helvetica Neue", sans-serif;	*/ /* Font */
-	text-shadow: rgba(0,0,0,0.6) 1px 1px 0; /* Text Shadow */
-	
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+	background-color: #000;
+	/*background-image: url('bluemarblecorner1.jpg'); */
+	background-repeat: no-repeat;
+	background-position: 125px 400px;
+	background-size: cover;
+	color: #ddd;
+	font: 76% Verdana, Tahoma, sans-serif;
+	text-shadow: rgba(0,0,0,0.6) 1px 1px 0;
 }
 
-a {
-	color: #f7c777;														/* Link Color */
-	font-size: 1.2em;												/* Link Size */
-	text-decoration: none;									/* Remove underlines */
+/* Search bar */
+/*
+#searches {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5em;
+	align-items: center;
+	padding: 0.6em 1.2em;
+	background: rgba(0, 0, 0, 0.65);
+	backdrop-filter: blur(4px);
 }
 
-a:hover {
-	color: #ddd;														/* Link hover color */
+#searches form {
+	display: flex;
+	margin: 0;
+}
+
+#searches input[type="text"] {
+	background: #222;
+	border: 1px solid #444;
+	border-right: none;
+	border-radius: 5px 0 0 5px;
+	color: #ddd;
+	font-size: 1em;
+	padding: 0.35em 0.6em;
+	min-width: 0;
+	width: clamp(120px, 20vw, 220px);
+	box-shadow: rgba(0,0,0,0.3) 0 1px 3px inset;
+}
+
+#searches input[type="submit"] {
+	background: #333;
+	border: 1px solid #444;
+	border-left: none;
+	border-radius: 0 5px 5px 0;
+	color: #ddd;
+	font-size: 1em;
+	padding: 0.35em 0.7em;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+#searches input[type="submit"]:hover {
+	background: #444;
+	color: #fff;
+}
+
+#searches input:focus {
+	outline: 2px solid #f7c777;
+	outline-offset: -2px;
+}
+*/
+
+
+/* Link grid */
+
+#links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.5em;
+	padding: 1.5em 1.2em 2em;
+	align-content: flex-start;
 }
 
 .block {
-	/*border-left: 1px solid #999;	*/					/* Left border of link block */
-	float: left;
-	padding: 0.0em;														/* Padding around link block */
-	width: 210px;														/* Link block width */
+	flex: 0 0 clamp(170px, 20vw, 220px);
 }
 
 h1 {
-	margin: 0;
-	font-size: 2.0em;												/* Title size */
+	margin: 0 0 0.3em;
+	font-size: 1.5em;
+	color: #fff;
+	border-bottom: 1px solid rgba(255,255,255,0.15);
+	padding-bottom: 0.15em;
 }
 
 ul {
-	padding: 0.25em;
+	margin: 0;
+	padding: 0.2em 0;
+	list-style: none;
 }
 
 ul li {
-	list-style: none;
-	padding: 5px;
+	padding: 4px 0;
 }
 
-#searches {
-	position: absolute;											/* Position search box */
-	top: 2em;																/*		from top edge */
-	right: 2em;															/*		from right edge */
+a {
+	color: #f7c777;
+	font-size: 1.5em;
+	text-decoration: none;
 }
 
-form {
-	margin-top: 1em;
+a:hover {
+	color: #fff;
+	text-decoration: underline;
 }
 
-form input {
-	background: #333;												/* Background search box */
-	background: -webkit-gradient(						/*		gradient for webkit */
-		linear,
-		left top,
-		left bottom,
-		from(#222),
-		to(#333));
-	background: -moz-linear-gradient(				/*		gradient for gecko */
-		top,
-		#222,
-		#333);
-	border: 1px solid #444;									/* Border search box */
-	-webkit-box-shadow: rgba(0,0,0,0.2) 0 1px 2px;	/* Shadow search box - webkit */
-	-moz-box-shadow: rgba(0,0,0,0.2) 0 1px 2px;			/* Shadow search box - gecko */
-	box-shadow: rgba(0,0,0,0.2) 0 1px 2px;					/* Shadow search box - generic */
-	color: #ddd;														/* Text color search box */
-	font-size: 1em;													/* Text size search box */
-}
+/* Mobile: single-column layout */
 
-form input:first-child {
-	-webkit-border-top-left-radius: 5px;
-	-webkit-border-bottom-left-radius: 5px;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius-bottomleft: 5px;
-	border-top-left-radius: 5px;
-	border-bottom-left-radius: 5px;
-	border-right: 0;
-}
+@media (max-width: 480px) {
+	#searches {
+		padding: 0.5em 0.8em;
+	}
 
-form input:last-child {
-	-webkit-border-top-right-radius: 5px;
-	-webkit-border-bottom-right-radius: 5px;
-	-moz-border-radius-topright: 5px;
-	-moz-border-radius-bottomright: 5px;
-	border-top-right-radius: 5px;
-	border-bottom-right-radius: 5px;
-	border-left: 0;
+	#searches input[type="text"] {
+		width: 100%;
+		min-width: 0;
+		flex: 1;
+	}
+
+	#searches form {
+		width: 100%;
+	}
+
+	#links {
+		padding: 1em 0.8em;
+		gap: 1.2em;
+		flex-direction: column;
+	}
+
+	.block {
+		flex: none;
+		width: 100%;
+	}
 }
-/* cc BY-NC-SA License :: k3ttc4r :: 2008 :: http://k3ttc4r.deviantart.com */
-/* background by Alexander-GG :: http://alexander-gg.deviantart.com */

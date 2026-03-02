@@ -1,187 +1,132 @@
 /**
-	Startpage Reworked
-	==================
+ * Personal Start Page — script.js
+ *
+ * Reads the plain-text links already in the body, parses them,
+ * and replaces the body with styled HTML.
+ *
+ * This script is loaded at the BOTTOM of <body>, so the DOM is
+ * already fully available when it runs — no event listener needed.
+ *
+ * Link format in index.html:
+ *   Category Heading
+ *   https://www.example.com || Link Title
+ *
+ * Settings are defined in settings.js (loaded just before this file).
+ */
 
-	by Christian Brassat,
-	reusing code by Jukka Svahn
-*/
+(function () {
 
-/**
-	Released under MIT License
-	
-	Copyright (c) 2010 Jukka Svahn, Christian Brassat
-	<http://rahforum.biz>
-	<http://crshd.cc>
+	/* 1. Capture raw text before we touch anything */
+	var rawText = document.body.textContent || document.body.innerText || '';
+	var lines   = rawText.split('\n');
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+	/* 2. Build the link sections */
+	var linksDiv = document.createElement('div');
+	linksDiv.id  = 'links';
 
-$(document).ready(function() {
-	
-	  /* Get Links
-	  =================*/
-	  var linkString = $('body').text();
+	var currentBlock = null;
+	var currentList  = null;
 
-	  /* Clear Page
-	  ================*/
-	  $('body').empty();
+	for (var i = 0; i < lines.length; i++) {
+		var line = lines[i].trim();
+		if (!line) continue;
 
-	  /* Create Array from linkString
-	  ================*/
-	  var linkArray = linkString.split("\n");
+		if (line.indexOf('http') === 0) {
+			/* It's a link — split on " || " */
+			var parts = line.split(' || ');
+			var url   = parts[0];
+			var title = parts.length > 1 ? parts[1] : url;
 
-	  /* Go thru Array
-  	================*/
-	  var i;
-	  var count = 1;
-	  var html = '';
+			if (!currentBlock) {
+				currentBlock = createBlock('');
+				currentList  = currentBlock.querySelector('ul');
+				linksDiv.appendChild(currentBlock);
+			}
 
-	  for(i in linkArray) {
+			var li = document.createElement('li');
+			var a  = document.createElement('a');
+			a.href        = url;
+			a.textContent = title;
+			if (typeof newWindow !== 'undefined' && newWindow) {
+				a.target = '_blank';
+				a.rel    = 'noopener noreferrer';
+			}
+			li.appendChild(a);
+			currentList.appendChild(li);
 
-		    /* Get line
-		       ================*/
-		    var line = jQuery.trim(linkArray[i]);
+		} else {
+			/* It's a heading — start a new block */
+			currentBlock = createBlock(line);
+			currentList  = currentBlock.querySelector('ul');
+			linksDiv.appendChild(currentBlock);
+		}
+	}
 
-		    // If line is empty, skip
-		    if(!line)
-			      continue;
+	/* 3. Build the search bar */
+	var searchEngines = [
+		{ key: 'google',       label: 'Google',        action: 'https://www.google.com/search',         param: 'q'      },
+		{ key: 'googleImages', label: 'Google Images',  action: 'https://www.google.com/images',         param: 'q'      },
+		{ key: 'yahoo',        label: 'Yahoo',          action: 'https://search.yahoo.com/search',       param: 'p'      },
+		{ key: 'wikipedia',    label: 'Wikipedia',      action: 'https://www.wikipedia.org/w/index.php', param: 'search' },
+		{ key: 'dictcc',       label: 'dict.cc',        action: 'https://www.dict.cc/',                  param: 's'      },
+		{ key: 'leo',          label: 'Leo',            action: 'https://dict.leo.org/',                 param: 'search' },
+		{ key: 'flickr',       label: 'Flickr',         action: 'https://www.flickr.com/search',         param: 'q'      },
+		{ key: 'deviantart',   label: 'deviantART',     action: 'https://www.deviantart.com/search',     param: 'q'      }
+	];
 
-		    /* If it doesn't start with http,
-		     * it must be a seperator
-		     ================*/
-		    if(line.substr(0,4) != 'http') {
-			      if(count > 1)
-				        html = html + '</div>';
-			      html = html + '<div class="block"><h1>' + line + '</h1><ul>';
-			      count++;
-			      continue;
-		    }
+	var searchDiv       = document.createElement('div');
+	searchDiv.id        = 'searches';
+	var hasSearchEngine = false;
 
-		    /* Split URL and Title
-		       ================*/
-		    var lineArray = line.split(" || ");
-		    var url = lineArray[0];
-		    var title = lineArray[1];
+	for (var j = 0; j < searchEngines.length; j++) {
+		var engine = searchEngines[j];
+		if (typeof window[engine.key] !== 'undefined' && window[engine.key]) {
+			hasSearchEngine = true;
+			var form    = document.createElement('form');
+			form.method = 'get';
+			form.action = engine.action;
 
-		    /* Add HTML code
-		       ================*/
-		    if(newwindow)
-			      html = html + '<li><a href="' + url + '" target="_blank">' + title + '</a></li>'
-		    else
-			      html = html + '<li><a href="' + url + '">' + title + '</a></li>'
-	  }
+			var textInput       = document.createElement('input');
+			textInput.type      = 'text';
+			textInput.name      = engine.param;
+			textInput.maxLength = 255;
 
-	  /* Add generated content to page
-	     ================*/
-	  html = html + '</ul></div>';
-	  $('body').append(html);
+			var btn   = document.createElement('input');
+			btn.type  = 'submit';
+			btn.value = engine.label;
 
+			form.appendChild(textInput);
+			form.appendChild(btn);
+			searchDiv.appendChild(form);
+		}
+	}
 
-	  /* Animation Time!
-	     ================*/
-	
-	  /* Hide lists
-	     ================*/
-	 /* $('ul').slideUp(); */
+	/* 4. Replace body content */
+	document.body.textContent = '';
 
-	  /* Show on hover
-	     ================*/
-	/*  $('.block').mouseenter(function() {
-		    $('ul', this).slideDown();
-	  }); */
+	if (hasSearchEngine) {
+		document.body.appendChild(searchDiv);
+	}
+	document.body.appendChild(linksDiv);
 
-	  /* Hide on unhover
-	     ================*/
-	/*  $('.block').mouseleave(function() {
-		    $('ul', this).slideUp();
-	  }); */
+	/* 5. Optionally focus the first search input */
+	if (typeof focusSearch !== 'undefined' && focusSearch && hasSearchEngine) {
+		var firstInput = searchDiv.querySelector('input[type="text"]');
+		if (firstInput) firstInput.focus();
+	}
 
+	/* Helper */
+	function createBlock(heading) {
+		var block       = document.createElement('div');
+		block.className = 'block';
+		if (heading) {
+			var h1         = document.createElement('h1');
+			h1.textContent = heading;
+			block.appendChild(h1);
+		}
+		var ul = document.createElement('ul');
+		block.appendChild(ul);
+		return block;
+	}
 
-	  /* Search Engines
-	     ================*/
-
-	  var search = '<div id="searches">';
-	
-	  if(google) {
-		    var search = search + '<form method="get" action="http://www.google.com/search">',
-				search = search + '<input type="text" id="g" name="q" size="34" maxlength="255" value="" />',
-				search = search +	'<input type="submit" value="Google" />',
-				search = search + '</form>';
-	  }
-
-	  if(googleimages) {
-		    var search = search + '<form method="get" action="http://www.google.com/images">',
-				search = search + '<input type="text" id="i" name="q" size="27" maxlength="255" value="" />',
-				search = search +	'<input type="submit" value="Google Images" />',
-				search = search + '</form>';
-	  }
-
-	  if(yahoo) {
-		    var search = search + '<form method="get" action="http://search.yahoo.com/search">',
-				search = search + '<input type="text" id="y" name="p" size="35" maxlength="255" value="" />',
-				search = search +	'<input type="submit" value="Yahoo" />',
-				search = search + '</form>';
-	  }
-
-	  if(wikipedia) {
-		    var search = search + '<form method="get" action="http://www.wikipedia.org/w/index.php">',
-				search = search + '<input type="text" id="w" name="search" size="31" maxlength="255" value="" />',
-				search = search +	'<input type="submit" value="Wikipedia" />',
-				search = search + '</form>';
-	  }
-
-	  if(dictcc) {
-		    var search = search + '<form method="get" action="http://www.dict.cc/">',
-				search = search + '<input type="text" id="dcc" name="s" size="33" maxlength="255" value="" />',
-				search = search +	'<input type="submit" value="dict.cc" />',
-				search = search + '</form>';
-	  }
-
-	  if(leo) {
-		    var search = search + '<form method="get" action="http://dict.leo.org/">',
-				search = search + '<input type="text" id="l" name="search" size="37" maxlength="255" value="" />',
-				search = search +	'<input type="submit" value="leo" />',
-				search = search + '</form>';
-	  }
-
-	  if(flickr) {
-		    var search = search + '<form method="get" action="http://www.flickr.com/search">',
-				search = search + '<input type="text" id="da" name="q" size="34" maxlength="255" value="" />',
-				search = search +	'<input type="submit" value="flickr" />',
-				search = search + '</form>';
-	  }
-
-	  if(deviantart) {
-		    var search = search + '<form method="get" action="http://browse.deviantart.com/">',
-				search = search + '<input type="text" id="da" name="q" size="30" maxlength="255" value="" />',
-				search = search +	'<input type="submit" value="deviantART" />',
-				search = search + '</form>';
-	  }
-
-	  var search = search + '</div>';
-
-	  /* Add to page
-	     ================*/
-	  $('body').append(search);
-    if(focusSearch) {
-        var searchDiv = document.getElementById ('searches');
-        $(searchDiv.firstChild.firstChild).focus();
-    }
-
-});
+}());
