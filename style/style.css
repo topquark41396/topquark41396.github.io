@@ -93,7 +93,7 @@ h1 {
 	margin: 0 0 0.3em;
 	font-size: 1.5em;
 	color: #fff;
-	border-bottom: 1px solid rgba(255,255,255,0.15);
+	/* border-bottom: 1px solid rgba(255,255,255,0.15); */
 	padding-bottom: 0.15em;
 }
 
